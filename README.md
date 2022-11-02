@@ -1,6 +1,6 @@
 # Sharp Benders Academy Database
 
-Web application to manage data for a school system. Created using Python, Flask, MySQL
+Web application to manage data for a school system. Allows an administrator to perform CRUD operations on students, majors, advisors, instructors, and more. Admin can also register students for courses and assign instructors to courses. Website front end created with Bootstrap. Back end created with Flask and MySQL. 
 
 ## Screenshots 
 ![students](https://user-images.githubusercontent.com/88285952/199621306-e4d769c7-d581-4bbf-b36d-7414b9ad996c.png) 
