@@ -2,7 +2,13 @@
 
 Web application to manage data for a school system. Created using Python, Flask, MySQL
 
+## Screenshots 
+![students](https://user-images.githubusercontent.com/88285952/199621306-e4d769c7-d581-4bbf-b36d-7414b9ad996c.png) 
+![image1](https://user-images.githubusercontent.com/88285952/199621713-f5af3072-6f57-4818-8111-9f72d6c371aa.png)
+(sample data)
 
+## Schema
+![schema](https://user-images.githubusercontent.com/88285952/199621590-1f20faff-ad7e-4614-9e49-f5a710f34f6c.png)
 
 
 ## Getting started
