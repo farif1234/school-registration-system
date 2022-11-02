@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Semesters{% endblock %}
+
+{% block navlinks %}
+<div class="navbar-nav nav-tabs">
+    <a class="nav-link mx-3" aria-current="page" href="/">Home</a>
+    <a class="nav-link" aria-current="page" href="/students">Students</a>
+    <a class="nav-link" href="/majors">Majors</a>
+    <a class="nav-link" href="/advisors">Advisors</a>
+    <a class="nav-link" href="/instructors">Instructors</a>
+    <a class="nav-link" href="/courses">Courses</a>
+    <a class="nav-link" href="/courses_instructors">Courses_Instructors</a>
+    <a class="nav-link" href="/registrations">Registrations</a>
+    <a class="nav-link active" href="/semesters">Semesters</a>
+    <a class="nav-link" href="/grades">Grades</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center">
+    <h1 class="display-5">Semesters</h1>
+    <p class="text-muted">View or add semesters</p>
+</div>
+
+<!-- Add New Semester Button -->
+<div class="container-fluid text-center">
+    <button class="btn btn-primary" onclick="window.location.href='#addSemester';">Add New Semester</button>
+</div>
+<br />
+
+<div style="display: block; max-height: 450px; overflow-y: auto; width:100%;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="position:sticky; top: 0; background-color: rgb(220, 220, 220);">
+                {% for key in semesters[0].keys() %}
+
+                <th scope="col"> {{ key }} </th>
+
+                {% endfor %}
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for semester in semesters %}
+            {% set semester_id = semester['Semester ID'] %}
+            <tr id="{{semester_id}}">
+                <th scope="row">{{semester['Semester ID']}}</th>
+                <td>{{semester['Title']}}</td>
+                <td><a href="delete_semester/{{semester_id}}">
+                        <img src="{{ url_for('static', filename='images/trash.svg')}}" alt="Delete" width="20"
+                            height="20">
+                    </a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p id="addSemester"> </p>
+<br />
+<hr>
+<br />
+
+<div class="container-fluid">
+    <form action="/semesters" method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Add Semester</legend>
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="semesterid">Semester ID</label>
+                <div class="col-md-2">
+                    <input id="semesterid" name="semesterid" type="text" minlength="4" maxlength="4"
+                        class="form-control input-md" required="">
+                    <div id="semesterhelp" class="form-text">Enter a unique 4 letter abbreviation</div>
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group pt-2">
+                <label class="col-md-4 control-label" for="semestertitle">Semester Title</label>
+                <div class="col-md-4">
+                    <input id="semestertitle" name="semestertitle" type="text" placeholder=""
+                        class="form-control input-md" required="">
+
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="submit"></label>
+                <div class="col-md-4">
+                    <button id="submit" name="submit" class="btn btn-primary">Add Semester</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+
+
+</div>
+
+{% endblock %}

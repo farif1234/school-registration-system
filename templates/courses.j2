@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block navlinks %}
+<div class="navbar-nav nav-tabs">
+    <a class="nav-link mx-3" aria-current="page" href="/">Home</a>
+    <a class="nav-link" aria-current="page" href="/students">Students</a>
+    <a class="nav-link" href="/majors">Majors</a>
+    <a class="nav-link" href="/advisors">Advisors</a>
+    <a class="nav-link" href="/instructors">Instructors</a>
+    <a class="nav-link active" href="/courses">Courses</a>
+    <a class="nav-link" href="/courses_instructors">Courses_Instructors</a>
+    <a class="nav-link" href="/registrations">Registrations</a>
+    <a class="nav-link" href="/semesters">Semesters</a>
+    <a class="nav-link" href="/grades">Grades</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center">
+    <h1 class="display-5">Courses</h1>
+    <p class="text-muted">View, add or delete courses</p>
+</div>
+
+<!-- Add New Course Button -->
+<div class="container-fluid text-center">
+    <button class="btn btn-primary" onclick="window.location.href='#addCourse';">Add New Course</button>
+</div>
+<br />
+
+<div style="display: block; max-height: 450px; overflow-y: auto; width:100%;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="position:sticky; top: 0; background-color: rgb(220, 220, 220);">
+                {% for key in courses[0].keys() %}
+
+                <th scope="col"> {{ key }} </th>
+
+                {% endfor %}
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            {% set courseID = course['Course ID'] %}
+            <tr id="{{courseID}}">
+                {% for key in course.keys() %}
+
+                <td>{{course[key]}}
+                    {% endfor %}
+                <td><a href="delete_course/{{courseID}}">
+                        <img src="{{ url_for('static', filename='images/trash.svg')}}" alt="Delete" width="20"
+                            height="20">
+                    </a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p id="addCourse"> </p>
+<br />
+<hr>
+<br />
+
+<div class="container-fluid">
+    <form action="/courses" method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Add Course</legend>
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="course_id">Course ID</label>
+                <div class="col-md-2">
+                    <input id="course_id" name="course_id" type="number" min="1000" max="9999" placeholder=""
+                        class="form-control input-md" required="">
+                    <div id="coursehelp" class="form-text">Enter a unique 4 digit number</div>
+
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="title">Course Title</label>
+                <div class="col-md-4">
+                    <input id="title" name="title" type="text" placeholder="Enter Course Title"
+                        class="form-control input-md" required="">
+
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="start_time">Start Time</label>
+                <div class="col-md-2">
+                    <input id="start_time" name="start_time" type="text" placeholder="14:00"
+                        class="form-control input-md">
+
+                </div>
+            </div>
+
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="end_time">End Time</label>
+                <div class="col-md-2">
+                    <input id="end_time" name="end_time" type="text" placeholder="16:00" class="form-control input-md">
+
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="num_of_credits">Number of credits</label>
+                <div class="col-md-1">
+                    <input id="num_of_credits" name="num_of_credits" type="number" placeholder=""
+                        class="form-control input-md" required="">
+
+                </div>
+            </div>
+
+            <!-- Multiple Checkboxes (inline) -->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="is_remote">Is remote?</label>
+                <div class="col-md-4">
+                    <label class="radio" for="is_remote">
+                        <input type="radio" name="is_remote" id="is_remote" value="1" required>
+                        Yes
+                        <input type="radio" name="is_remote" id="is_remote" value="0" required>
+                        No
+                    </label>
+                </div>
+            </div>
+
+
+
+            <!-- Text input-->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="capacity">Capacity</label>
+                <div class="col-md-2">
+                    <input id="capacity" name="capacity" type="number" placeholder="" class="form-control input-md">
+
+                </div>
+            </div>
+
+            <!-- Select Multiple -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="instructor_ids">Select Instructor(s)</label>
+                <div class="col-md-4">
+                    <select id="instructor_ids" name="instructor_ids" class="form-control form-select"
+                        multiple="multiple" required>
+                        {% for instructor in instructors %}
+                        <option value="{{instructor.instructor_id}}">{{instructor.Instructor}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="instructorselecthelp" class="form-text">Hold Ctrl/CMD to select multiple instructors</div>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group pb-2">
+                <label class="col-md-4 control-label" for="submit"></label>
+                <div class="col-md-4">
+                    <button id="submit" name="submit" class="btn btn-primary">Add Course</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+
+</div>
+
+
+<script>
+    function onDelete() {
+        alert('Are you sure you want to delete?')
+    }
+</script>
+{% endblock %}

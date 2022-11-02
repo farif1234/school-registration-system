@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Grades{% endblock %}
+
+{% block navlinks %}
+<div class="navbar-nav nav-tabs">
+    <a class="nav-link mx-3" aria-current="page" href="/">Home</a>
+    <a class="nav-link" aria-current="page" href="/students">Students</a>
+    <a class="nav-link" href="/majors">Majors</a>
+    <a class="nav-link" href="/advisors">Advisors</a>
+    <a class="nav-link" href="/instructors">Instructors</a>
+    <a class="nav-link" href="/courses">Courses</a>
+    <a class="nav-link" href="/courses_instructors">Courses_Instructors</a>
+    <a class="nav-link" href="/registrations">Registrations</a>
+    <a class="nav-link" href="/semesters">Semesters</a>
+    <a class="nav-link active" href="/grades">Grades</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid text-center">
+    <h1 class="display-5">Grades</h1>
+    <p class="text-muted">View, add, delete or search for student grades</p>
+</div>
+
+<!-- Add New Grade Button -->
+<div class="container-fluid text-center">
+    <button class="btn btn-primary" onclick="window.location.href='#addGrade';">Add New Grade</button>
+</div>
+<br />
+
+<hr>
+
+<div class="container-fluid">
+    <form action="/grades/filter_grades" method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Filter for a Student's Grade</legend>
+
+            <!-- Select Basic -->
+            <div class="form-group pt-2">
+                <label class="col-md-4 control-label" for="filter_student_id">Student Name</label>
+                <div class="col-md-4">
+                    <select id="filter_student_id" name="filter_student_id" class="form-control form-select" required>
+                        <option value="" disabled selected hidden>Please Choose...</option>
+                        {% for student in students_with_grades %}
+                        {% set filter_student_id = student.student_id %}
+                        <option value="{{student.student_id}}">{{student.Student}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <p><em>Students who do not have grades will not be available to filter.</em></p>
+
+            <!-- Button -->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="search">Find Grades</label>
+                <div class="col-md-4">
+                    <button id="search" name="search" class="btn btn-info">Search</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<br></br>
+
+<div style="display: block; max-height: 450px; overflow-y: auto; width:100%;">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr style="position:sticky; top: 0; background-color: rgb(220, 220, 220);">
+                {% for key in grades[0].keys() %}
+
+                <th scope="col"> {{ key }} </th>
+
+                {% endfor %}
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            {% set grade_id = grade['Grade ID'] %}
+            <tr id="{{grade_id}}">
+                {% for key in grade.keys() %}
+
+                <td>{{grade[key]}}
+                    {% endfor %}
+                <td><a href="delete_grade/{{grade_id}}">
+                        <img src="{{ url_for('static', filename='images/trash.svg')}}" alt="Delete" width="20"
+                            height="20">
+                    </a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p id="addGrade"> </p>
+<br />
+<hr>
+<br />
+
+<div class="container-fluid">
+    <form action="/grades" method="post" class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Add Grade</legend>
+
+            <!-- Select Basic -->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="studentid">Student Name</label>
+                <div class="col-md-4">
+                    <select id="student_id" name="student_id" class="form-control form-select" required>
+                        <option value="" disabled selected hidden>Please Choose...</option>
+                        {% for student in students %}
+                        <option value="{{student.student_id}}">{{student.Student}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group py-2">
+                <label class="col-md-4 control-label" for="course_id">Course Name</label>
+                <div class="col-md-4">
+                    <select id="course_id" name="course_id" class="form-control form-select" required>
+                        <option value="" disabled selected hidden>Please Choose...</option>
+                        {% for course in courses %}
+                        <option value="{{course.course_id}}">{{course.Course}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Multiple Radios (inline) -->
+            <div class="form-group pt-2">
+                <label class="col-md-4 control-label" for="passed_course">Grade</label>
+                <div class="col-md-4">
+                    <label class="radio" for="passed_course">
+                        <input type="radio" name="passed_course" id="passed_course" value="1" required>
+                        Passed
+                        <input type="radio" name="passed_course" id="passed_course" value="0" required>
+                        Failed
+                    </label>
+                </div>
+            </div>
+
+
+            <!-- Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="submit"></label>
+                <div class="col-md-4">
+                    <button id="submit" name="submit" class="btn btn-primary">Add Grade</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+    <hr>
+
+
+</div>
+
+{% endblock %}
